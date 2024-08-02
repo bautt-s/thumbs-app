@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import * as aws from '@aws-sdk/client-ses';
+
 import {
 	FROM_EMAIL,
 	MAIL_HOST,
