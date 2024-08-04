@@ -1,4 +1,5 @@
-import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+import { pgTable, text, timestamp, boolean, jsonb } from 'drizzle-orm/pg-core';
 
 export const userTable = pgTable('users', {
 	id: text('id').notNull().primaryKey(),
@@ -38,14 +39,28 @@ export const businessTable = pgTable('businesses', {
 	name: text('name').notNull(),
 	type: text('type').notNull(),
 	address: text('address').notNull(),
-	googleLink: text('google_link').notNull(),
 	userId: text('user_id')
 		.notNull()
 		.references(() => userTable.id),
-  });
+});
+
+export const linkTreeTable = pgTable('link_trees', {
+	id: text('id').notNull().primaryKey(),
+	googleLink: text('google_link'),
+	yelpLink: text('yelp_link'),
+	tripAdvisorLink: text('trip_advisor_link'),
+	otherLinks: jsonb('other_links').array().default(sql`'{}'::jsonb[]`).notNull(),
+	image: text('image'),
+	color: text('color'),
+	businessId: text('business_id')
+		.notNull()
+		.references(() => businessTable.id),
+});
 
 export type User = typeof userTable.$inferInsert;
 export type UpdateUser = Partial<typeof userTable.$inferInsert>;
 export type Session = typeof sessionTable.$inferInsert;
 export type Business = typeof businessTable.$inferInsert;
 export type UpdateBusiness = Partial<typeof businessTable.$inferInsert>;
+export type LinkTree = typeof linkTreeTable.$inferInsert;
+export type UpdateLinkTree = Partial<typeof linkTreeTable.$inferInsert>;

@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { Button } from '$lib/components/ui/button';
 	import { APP_NAME } from '$lib/config/constants';
 </script>
 
 <svelte:head>
-	<title>{APP_NAME}</title>
+	<title>{APP_NAME} | Home</title>
 	<meta
 		name="description"
 		content="Thumbs -- An easy way for clients to review and rank their favourite restaurants!"

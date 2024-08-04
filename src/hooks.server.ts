@@ -1,6 +1,7 @@
 import { lucia } from '$lib/server/lucia';
 import { redirect, type Handle } from '@sveltejs/kit';
 import type { HandleServerError } from '@sveltejs/kit';
+import { getBusinessByUserId } from '$lib/server/database/business-model';
 
 export const handleError: HandleServerError = async ({ error, event }) => {
 	const errorId = crypto.randomUUID();
@@ -48,6 +49,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	event.locals.user = user;
 	event.locals.session = session;
+
+	if (user) event.locals.business = await getBusinessByUserId(user.id)
 
 	if (event.route.id?.startsWith('/(protected)')) {
 		if (!user) redirect(302, '/auth/sign-in');

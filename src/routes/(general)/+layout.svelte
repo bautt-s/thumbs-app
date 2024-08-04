@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-	import '../app.pcss';
+	import type { PageData } from '../$types';
+	import '../../app.pcss';
 	import { page } from '$app/stores';
 	import { ModeWatcher } from 'mode-watcher';
 	import { getFlash } from 'sveltekit-flash-message';
@@ -30,7 +30,7 @@
 <Toaster richColors />
 <div class="relative flex min-h-screen flex-col">
 	<Navigation {user} />
-	<div class="mt-8 md:mt-12">
+	<div class="mt-8 mb-8 md:mt-8">
 		<slot />
 	</div>
 </div>

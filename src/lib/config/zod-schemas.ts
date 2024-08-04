@@ -68,14 +68,24 @@ export const businessSchema = z.object({
 		.string({ required_error: 'Type is required.' })
 		.min(1, { message: 'Type is required.' })
 		.trim(),*/
-	googleLink: z.string({
+	/*googleLink: z.string({
 		required_error: 'Google link is required'
 	})
 		.min(1, { message: 'Google link is required' })
 		.trim()
 		.refine(val => val === '' || z.string().url().safeParse(val).success, {
 			message: 'Invalid URL',
-		})
+		})*/
+})
+
+export type linkTreeSchema = typeof linkTreeSchema;
+
+export const linkTreeSchema = z.object({
+	googleLink: z.string().url({ message: 'Invalid URL.' }),
+	yelpLink: z.string().url({ message: 'Invalid URL.' }),
+	tripAdvisorLink: z.string().url({ message: 'Invalid URL.' }),
+	imageLink: z.string(),
+	color: z.string()
 })
 
 export type BusinessSchema = typeof businessSchema;

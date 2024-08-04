@@ -33,7 +33,7 @@
 	<div class="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
 		<div class="flex gap-6 md:gap-10">
 			<a class="flex items-center space-x-3" href="/">
-				<img src="favicon.png" alt='logo' class='w-6 h-6' />
+				<img src="/favicon.png" alt='logo' class='w-6 h-6' />
 				<span class="inline-block font-bold">{APP_NAME}</span>
 			</a>
 			<nav class="flex gap-6">
