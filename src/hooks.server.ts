@@ -1,7 +1,7 @@
 import { lucia } from '$lib/server/lucia';
 import { redirect, type Handle } from '@sveltejs/kit';
 import type { HandleServerError } from '@sveltejs/kit';
-import { getBusinessByUserId } from '$lib/server/database/business-model';
+import { getBusinessByUserId } from '$lib/server/database/models/business-model';
 
 export const handleError: HandleServerError = async ({ error, event }) => {
 	const errorId = crypto.randomUUID();

@@ -4,7 +4,7 @@ import { setError, superValidate } from 'sveltekit-superforms/server';
 import { lucia } from '$lib/server/lucia';
 import { Argon2id } from 'oslo/password';
 import { userSchema } from '$lib/config/zod-schemas';
-import { getUserByEmail } from '$lib/server/database/user-model';
+import { getUserByEmail } from '$lib/server/database/models/user-model';
 
 const signInSchema = userSchema.pick({
 	email: true,

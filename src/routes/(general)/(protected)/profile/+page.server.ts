@@ -3,7 +3,7 @@ import { setError, superValidate, message } from 'sveltekit-superforms/server';
 import { setFlash } from 'sveltekit-flash-message/server';
 import { userSchema } from '$lib/config/zod-schemas';
 import { updateEmailAddressSuccessEmail } from '$lib/config/email-messages';
-import { updateUser } from '$lib/server/database/user-model.js';
+import { updateUser } from '$lib/server/database/models/user-model.js';
 import type { RequestEvent } from './$types';
 
 const profileSchema = userSchema.pick({

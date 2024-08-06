@@ -1,10 +1,10 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { RequestEvent } from './$types';
-import { createBusiness, getBusinessById, getBusinessByUserId } from '$lib/server/database/business-model';
-import { businessSchema, linkTreeSchema } from '$lib/config/zod-schemas';
+import { createBusiness, getBusinessById, getBusinessByUserId } from '$lib/server/database/models/business-model';
+import { businessSchema } from '$lib/config/zod-schemas';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { setFlash } from 'sveltekit-flash-message/server';
-import { createLinkTree, getTreeByBusiness, getTreeById, updateLinkTree } from '$lib/server/database/link-tree-model';
+import { getLocationsByBusiness } from '$lib/server/database/models/locations-model';
 
 export const load = async (event: RequestEvent) => {
 	//I only have this function here so it will check page again
@@ -19,14 +19,15 @@ export const load = async (event: RequestEvent) => {
 	
 	try {
 		const business = await getBusinessByUserId(user.id)
+		let locations;
 
-		let linkTree;
 		if (business) {
-			linkTree = await getTreeByBusiness(business.id)
+			locations = await getLocationsByBusiness(business.id)
+
 			event.locals.business = business
 		}
 
-		return { user, business, linkTree }
+		return { user, business, locations }
 	} catch (e) {
 		return {
 			status: 500
@@ -64,15 +65,6 @@ export const actions = {
 			const newBusiness = await createBusiness(business)
 
 			if (newBusiness) {
-				let treeId = crypto.randomUUID();
-
-				while ((await getTreeById(treeId)) !== null) treeId = crypto.randomUUID();
-
-				await createLinkTree({
-					id: treeId,
-					businessId: id
-				})
-
 				setFlash({
 					type: 'success',
 					message: 'Restaurant successfully created!'
@@ -85,56 +77,8 @@ export const actions = {
 		} catch (e) {
 			console.log(e);
 			setFlash({ type: 'error', message: 'Business was not able to be created.' }, event);
-			// email already in use
-			// might be other type of error but this is most common and this is how lucia docs sets the error to duplicate user
+			
 			return setError(form, 'An error occured while creating the business.');
-		}
-	},
-
-	linkTree: async (event: RequestEvent) => {
-		const form = await superValidate(event, linkTreeSchema);
-		let success = false
-
-		if (!form.valid) {
-			return fail(400, {
-				form
-			});
-		}
-		console.log(event.locals)
-		try {
-			if (!event.locals.user) throw Error
-			if (!event.locals.business) throw Error
-
-			const businessTree = await getTreeByBusiness(event.locals.business.id)
-
-			const linkTree = {
-				googleLink: form.data.googleLink,
-				yelpLink: form.data.yelpLink,
-				tripAdvisorLink: form.data.tripAdvisorLink,
-				otherLinks: [],
-				image: null,
-				color: form.data.color
-			}
-
-			let updatedTree
-			if (businessTree) updatedTree = await updateLinkTree(businessTree.id, linkTree)
-
-			if (updatedTree) {
-				setFlash({
-					type: 'success',
-					message: 'Link tree successfully updated!'
-				}, event)
-
-				success = true
-			}
-
-			return { form, success };
-		} catch (e) {
-			console.log(e);
-			setFlash({ type: 'error', message: 'Link tree was not able to be updated.' }, event);
-			// email already in use
-			// might be other type of error but this is most common and this is how lucia docs sets the error to duplicate user
-			return setError(form, 'An error occured while updating the link tree.');
 		}
 	}
 }

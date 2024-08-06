@@ -12,8 +12,8 @@ export const getTreeById = async (id: string) => {
 	}
 };
 
-export const getTreeByBusiness = async (businessId: string) => {
-	const tree = await db.select().from(linkTreeTable).where(eq(linkTreeTable.businessId, businessId));
+export const getTreeByLocation = async (locationId: string) => {
+	const tree = await db.select().from(linkTreeTable).where(eq(linkTreeTable.locationId, locationId));
 	if (tree.length === 0) {
 		return null;
 	} else {

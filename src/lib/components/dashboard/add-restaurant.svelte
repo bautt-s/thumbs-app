@@ -21,7 +21,6 @@
     }
 
     export let form: ExtendedSuperValidated<CreateBusinessSchema>
-    
     let open = false
 
     $: if (form) {

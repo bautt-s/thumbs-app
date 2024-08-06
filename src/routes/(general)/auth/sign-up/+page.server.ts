@@ -3,7 +3,7 @@ import { setFlash } from 'sveltekit-flash-message/server';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { Argon2id } from 'oslo/password';
 import { lucia } from '$lib/server/lucia';
-import { createUser, getUserById } from '$lib/server/database/user-model';
+import { createUser, getUserById } from '$lib/server/database/models/user-model';
 import { userSchema } from '$lib/config/zod-schemas';
 import { sendVerificationEmail } from '$lib/config/email-messages';
 

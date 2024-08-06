@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { getUserByEmail, createUser, getUserById } from '$lib/server/database/user-model.js';
+import { getUserByEmail, createUser, getUserById } from '$lib/server/database/models/user-model.js';
 import { googleOauth, lucia } from '$lib/server/lucia';
 import { OAuth2RequestError } from 'arctic';
 import { sendVerificationEmail } from '$lib/config/email-messages';

@@ -1,4 +1,4 @@
-import { getUserByToken, updateUser } from '$lib/server/database/user-model.js';
+import { getUserByToken, updateUser } from '$lib/server/database/models/user-model.js';
 import { fail } from '@sveltejs/kit';
 import { sendWelcomeEmail } from '$lib/config/email-messages';
 import type { User } from '$lib/server/database/drizzle-schemas';

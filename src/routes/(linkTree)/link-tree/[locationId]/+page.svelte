@@ -5,20 +5,18 @@
     import IconRightArrow from '~icons/ep/arrow-right'
     import IconGoogle from '~icons/mage/google'
     import IconYelp from '~icons/fa/yelp'
-    import IconTripAdvisor from '~icons/fa/tripadvisor'
 	import { getLuminance } from '$lib/_helpers/getLuminance.js';
     import { Button } from '$lib/components/ui/button';
 	import { goto } from '$app/navigation';
 
     export let data
     
-    const { linkTree, business } = data
-    let googleLink, yelpLink, tripAdvisorLink, image, otherLinks, luminance: number
+    const { linkTree, location } = data
+    let googleLink, yelpLink, image, otherLinks, luminance: number
 
     if (linkTree) {
         googleLink = linkTree.googleLink
         yelpLink = linkTree.yelpLink
-        tripAdvisorLink = linkTree.tripAdvisorLink
         image = linkTree.image
         otherLinks = linkTree.otherLinks
 
@@ -35,29 +33,31 @@
 
     let googleHover = false
     let yelpHover = false
-    let tripAdvisorHover = false
 </script>
 
 <svelte:head>
     <title>
-        {(business?.name || 'Loading...') + ' | Links'}
+        {((location?.name && linkTree?.visible) ? location?.name : 'Not found') + ' | Links'}
     </title>
 </svelte:head>
 
-<section class="h-screen w-screen flex justify-center px-8 md:px-0" style={`background-color: ${linkTree?.color || 'white'}`}>
-    {#if !linkTree}
+<section class="h-screen w-screen flex justify-center px-8 md:px-0" 
+style={`background-color: ${linkTree?.visible ? linkTree?.color : 'white'}`}>
+    {#if (!linkTree || !linkTree.visible)}
     <div class="flex flex-col items-center w-full md:w-2/3 xl:w-1/3 my-auto">
         <h1 class="text-3xl font-extrabold leading-tight tracking-tighter">
             Oops! This page doesn't exist :/
         </h1>
 
-        <span class="text-gray-500">
+        <span class="text-gray-500 mt-3">
             Seems like you got stuck...
         </span>
 
-        <Button class="w-2/3 mt-6">
-            Go to home
-        </Button>
+        <a href="/home" class="w-2/3 mt-6 flex">
+            <Button class="w-full">
+                Go to home
+            </Button>
+        </a>
     </div>
     {:else}
     <div class="flex flex-col gap-y-4 items-center w-full md:w-2/3 xl:w-1/3 py-8">
@@ -109,13 +109,17 @@
 
         <Avatar.Root class="h-20 w-20 flex items-center justify-center">
             <Avatar.Fallback class="text-3xl font-semibold text-gray-700">
-                {business.name[0]}
+                {location.name[0]}
             </Avatar.Fallback>
         </Avatar.Root>
 
         <h1 class={`font-bold text-xl ${luminance > 0.5 ? 'text-neutral-800' : 'text-white'}`}>
-            {business.name}
+            {location.name}
         </h1>
+
+        {#if !linkTree.googleLink && !linkTree.yelpLink && !linkTree.otherLinks}
+            <span>Seems like this tree is empty!</span>
+        {/if}
 
         <div class="flex flex-col w-full gap-y-4 mt-4">
             {#if linkTree.googleLink}
@@ -150,24 +154,6 @@
                     ${luminance < 0.5 ? 'text-neutral-800 group-hover:text-white' 
                     : 'text-white group-hover:text-neutral-800'}`}>
                         Review us on Yelp!
-                    </span>
-                </a>
-            {/if}
-            
-            {#if linkTree.tripAdvisorLink}
-                <a href={linkTree.tripAdvisorLink} class={`flex flex-row items-center w-full border-2 group px-4 py-4 duration-300
-                rounded-lg transition-all ${luminance > 0.5 ? 'hover:border-neutral-800' : 'hover:border-white'}`}
-                on:mouseover={() => tripAdvisorHover = true} on:mouseout={() => tripAdvisorHover = false}
-                style={`background-color: ${tripAdvisorHover ? linkTree.color : (luminance > 0.5 ? '#262626' : 'white')}`} 
-                on:blur={() => null} on:focus={() => null} target="_blank">
-                    <IconTripAdvisor class="text-lg" 
-                    style={!tripAdvisorHover ? `color: ${linkTree?.color}` 
-                    : (luminance > 0.5 ? 'color: #262626' : 'color: white')} />
-    
-                    <span class={`flex mx-auto leading-tight tracking-tighter text-lg font-semibold
-                    ${luminance < 0.5 ? 'text-neutral-800 group-hover:text-white' 
-                    : 'text-white group-hover:text-neutral-800'}`}>
-                        Review us on Trip Advisor!
                     </span>
                 </a>
             {/if}

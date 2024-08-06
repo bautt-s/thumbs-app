@@ -4,68 +4,45 @@
     import * as Alert from '$lib/components/ui/alert';
 	import Button from "$lib/components/ui/button/button.svelte";
 	import { linkTreeSchema } from "$lib/config/zod-schemas";
-    import { AlertCircle, Loader2 } from 'lucide-svelte'
-	import type { AnyZodObject } from "zod";
-	import type { SuperValidated } from "sveltekit-superforms";
+    import { AlertCircle, Loader2, TreeDeciduous } from 'lucide-svelte'
 	import { invalidateAll } from "$app/navigation";
-    import { goto } from '$app/navigation';
 
     const createLinkTreeSchema = linkTreeSchema.pick({
+        id: true,
         googleLink: true,
         yelpLink: true,
-        tripAdvisorLink: true,
-        color: true
+        color: true,
+        visible: true
     })
 
-    type CreateLinkTreeSchema = typeof createLinkTreeSchema;
+    export let form: any
+    export let locationName: string
 
-    interface ExtendedSuperValidated<T extends AnyZodObject> extends SuperValidated<T> {
-        success?: boolean;
-    }
-
-    interface LinkTree {
-        id: string
-        googleLink: string | null
-        yelpLink: string | null
-        tripAdvisorLink: string | null
-        otherLinks: any[]
-        image: string | null
-        businessId: string
-        color: string | null
-    }
-
-    export let form: ExtendedSuperValidated<CreateLinkTreeSchema>
-    export let empty: boolean
-    export let linkTree: LinkTree
+    export let linkTree
     
     let open = false
 
-    $: if (form) {
+    $: if (form && form.success) {
         open = !form.success
         if (form.success) invalidateAll()
-    }
+        form = null
+    }  
 </script>
 
 <Sheet.Root>
     <Sheet.Trigger asChild let:builder>
         <div class="flex flex-row gap-x-2">
-            {#if !empty}
-                <Button class='w-full' on:click={() => goto(`/link-tree/${linkTree.businessId}`)}>
-                    My link tree
-                </Button>
-            {/if}
-
-            <Button builders={[builder]} class='w-full' variant={empty ? "default" : "outline"}>
-                {empty ? 'Add links' : 'Edit links'}
+            <Button builders={[builder]} variant="ghost" class="h-fit px-[6px]">
+                <TreeDeciduous class="w-5 h-5" />
             </Button>
         </div>
     </Sheet.Trigger>
     <Sheet.Content>
         <Sheet.Header>
-            <Sheet.Title>Add links to your link tree</Sheet.Title>
+            <Sheet.Title>Edit link tree</Sheet.Title>
             <Sheet.Description>
-              You can add links to Google, Yelp and TripAdvisor, as well as links to other
-              websites. You can also change the background of your link tree.
+              Edit "{locationName}" link tree. Add links to Google and Yelp, as well as links to other
+              websites, or change your tree's color.
             </Sheet.Description>
           </Sheet.Header>
 
@@ -84,39 +61,48 @@
                 </Alert.Root>
                 {/if}
 
+                <div class="hidden">
+                    <Form.Field {config} name="id">
+                        <Form.Item>
+                            <Form.Input value={linkTree?.id} />
+                        </Form.Item>
+                    </Form.Field>
+                </div>
+
                 <Form.Field {config} name="googleLink">
                     <Form.Item>
                         <Form.Label>Google URL</Form.Label>
-                        <Form.Input value={linkTree.googleLink} />
+                        <Form.Input value={linkTree?.googleLink} />
                         <Form.Validation />
                     </Form.Item>
                 </Form.Field>
                 <Form.Field {config} name="yelpLink">
                     <Form.Item>
                         <Form.Label>Yelp URL</Form.Label>
-                        <Form.Input value={linkTree.yelpLink} />
+                        <Form.Input value={linkTree?.yelpLink} />
                         <Form.Validation />
                     </Form.Item>
-                </Form.Field>
-                <Form.Field {config} name="tripAdvisorLink">
-                    <Form.Item>
-                        <Form.Label>Trip Advisor URL</Form.Label>
-                        <Form.Input value={linkTree.tripAdvisorLink} />
-                        <Form.Validation />
-                    </Form.Item>
-                </Form.Field>
-                
+                </Form.Field>        
                 <Form.Field {config} name="color">
                     <div class="flex flex-row items-center">
-                        <Form.Input value={linkTree.color} type='color' class="w-11 h-10 mr-4" />
+                        <Form.Input value={linkTree?.color} type='color' class="w-11 h-10 mr-4" />
                         <div class="flex flex-col">
                             <span class="font-semibold text-sm">Main color</span>
                             <span class="text-sm text-gray-500">Pick the prominent color of your link tree.</span>
                         </div>
                     </div>
                 </Form.Field>
+                <Form.Field {config} name="visible">
+                    <div class="flex flex-row items-center gap-x-4 mt-6">
+                        <Form.Switch checked={linkTree?.visible} />
+                        <div class="flex flex-col">
+                            <span class="font-semibold text-sm">Visible tree</span>
+                            <span class="text-sm text-gray-500">Enable or disable this location's tree.</span>
+                        </div>
+                    </div>
+                </Form.Field>
             
-                <Form.Button class="w-full mt-4" disabled={submitting}>
+                <Form.Button class="w-full mt-6" disabled={submitting}>
                     {#if submitting}
                     <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                     Please wait

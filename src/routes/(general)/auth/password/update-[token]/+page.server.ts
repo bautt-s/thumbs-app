@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { setError, superValidate } from 'sveltekit-superforms/server';
 import { userUpdatePasswordSchema } from '$lib/config/zod-schemas';
-import { getUserByToken, updateUser } from '$lib/server/database/user-model.js';
+import { getUserByToken, updateUser } from '$lib/server/database/models/user-model.js';
 import { Argon2id } from 'oslo/password';
 export const load = async (event) => {
 	const form = await superValidate(event, userUpdatePasswordSchema);
