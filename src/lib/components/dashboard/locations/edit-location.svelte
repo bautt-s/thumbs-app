@@ -44,7 +44,7 @@
             <Dialog.Description>
               Link a new location for your clients to review
             </Dialog.Description>
-
+        </Dialog.Header>
             <Form.Root let:submitting let:errors method="POST" {form} schema={createLocationSchema} let:config action="?/edit">
                 <div class="grid gap-4">
                     {#if errors?._errors?.length}
@@ -91,6 +91,6 @@
                     </Form.Button>
                 </div>
             </Form.Root>
-        </Dialog.Header>
+       
     </Dialog.Content>
 </Dialog.Root>

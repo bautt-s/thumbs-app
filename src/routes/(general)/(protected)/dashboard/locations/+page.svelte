@@ -1,4 +1,5 @@
 <script lang='ts'>
+    import QrCode from '$lib/components/dashboard/locations/qr-code.svelte';
 	import AddLocation from '$lib/components/dashboard/locations/add-location.svelte';
     import EditLocation from '$lib/components/dashboard/locations/edit-location.svelte';
     import UpdateLinktree from '$lib/components/dashboard/locations/update-linktree.svelte';
@@ -43,7 +44,7 @@
                                 <Table.Row>
                                     <Table.Head>Location</Table.Head>
                                     <Table.Head>Name</Table.Head>
-                                    <Table.Head>Address</Table.Head>
+                                    <Table.Head class="hidden md:block relative top-3">Address</Table.Head>
                                 </Table.Row>
                             </Table.Header>
 
@@ -52,22 +53,26 @@
                                 <Table.Row class="text-sm font-semibold">
                                     <Table.Cell class="text-center">{i}</Table.Cell>
                                     <Table.Cell>{location.name}</Table.Cell>
-                                    <Table.Cell>{location.address}</Table.Cell>
+                                    <Table.Cell class="hidden md:block top-3 relative">{location.address}</Table.Cell>
 
-                                    <Table.Cell class="flex flex-row justify-center items-center">
-                                        <EditLocation location={location} form={form} />
-                                        {#if linkTrees}
-                                        <UpdateLinktree form={form} locationName={location.name}
-                                        linkTree={linkTrees?.filter((lt) => lt.locationId === location.id)[0]}/>
-                                        {/if}
-
-                                        <DeleteLocation locationId={location.id} />
-
-                                        <a href={`/link-tree/${location.id}`} target="_blank">
-                                            <Button variant='ghost' class="px-1">
-                                                <ExternalLink class="w-5 h-5" />
-                                            </Button>
-                                        </a>
+                                    <Table.Cell>
+                                        <div class="flex flex-row justify-center items-center">
+                                            <EditLocation location={location} form={form} />
+                                            {#if linkTrees}
+                                            <UpdateLinktree form={form} locationName={location.name}
+                                            linkTree={linkTrees?.filter((lt) => lt.locationId === location.id)[0]}/>
+                                            {/if}
+    
+                                            <DeleteLocation locationId={location.id} />
+    
+                                            <a href={`/link-tree/${location.id}`} target="_blank">
+                                                <Button variant='ghost' class="px-1">
+                                                    <ExternalLink class="w-5 h-5" />
+                                                </Button>
+                                            </a>
+    
+                                            <QrCode url={`/link-tree/${location.id}`} />
+                                        </div>
                                     </Table.Cell>
                                 </Table.Row>
                                 {/each}
