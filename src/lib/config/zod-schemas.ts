@@ -80,7 +80,9 @@ export const linkTreeSchema = z.object({
 			return url.startsWith('https://www.google.com') || url.startsWith('http://www.google.com');
 		}, {
 			message: "Must be a valid Google URL.",
-		}),
+		})
+		.optional()
+		.or(z.literal('')),
 	yelpLink: z
 		.string()
 		.url()
@@ -88,7 +90,19 @@ export const linkTreeSchema = z.object({
 			return url.startsWith('https://www.yelp.com') || url.startsWith('http://www.yelp.com');
 		}, {
 			message: "Must be a valid Yelp URL.",
-		}),
+		})
+		.optional()
+		.or(z.literal('')),
+	tripAdvisorLink: z
+		.string()
+		.url()
+		.refine((url) => {
+			return url.startsWith('https://www.tripadvisor.com') || url.startsWith('http://www.tripadvisor.com');
+		}, {
+			message: "Must be a valid Yelp URL.",
+		})
+		.optional()
+		.or(z.literal('')),
 	imageLink: z
 		.string()
 		.trim(),

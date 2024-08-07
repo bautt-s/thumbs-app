@@ -180,6 +180,7 @@ export const actions = {
 			const linkTree = {
 				googleLink: form.data.googleLink,
 				yelpLink: form.data.yelpLink,
+				tripAdvisorLink: form.data.tripAdvisorLink,
 				image: null,
 				color: form.data.color,
 				visible: form.data.visible

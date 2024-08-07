@@ -33,6 +33,7 @@
 
     let googleHover = false
     let yelpHover = false
+    let tripAdvisorHover = false
 </script>
 
 <svelte:head>
@@ -154,6 +155,24 @@ style={`background-color: ${linkTree?.visible ? linkTree?.color : 'white'}`}>
                     ${luminance < 0.5 ? 'text-neutral-800 group-hover:text-white' 
                     : 'text-white group-hover:text-neutral-800'}`}>
                         Review us on Yelp!
+                    </span>
+                </a>
+            {/if}
+
+            {#if linkTree.tripAdvisorLink}
+                <a href={linkTree.tripAdvisorLink} class={`flex flex-row items-center w-full border-2 group px-4 py-4 duration-300
+                rounded-lg transition-all ${luminance > 0.5 ? 'hover:border-neutral-800' : 'hover:border-white'}`}  
+                on:mouseover={() => tripAdvisorHover = true} on:mouseout={() => tripAdvisorHover = false} 
+                style={`background-color: ${tripAdvisorHover ? linkTree.color : (luminance > 0.5 ? '#262626' : 'white')}`} 
+                on:blur={() => null} on:focus={() => null} target="_blank">
+                    <IconYelp class="text-xl left-2 relative"
+                    style={!tripAdvisorHover ? `color: ${linkTree?.color}` 
+                    : (luminance > 0.5 ? 'color: #262626' : 'color: white')} />
+    
+                    <span class={`flex mx-auto leading-tight tracking-tighter text-lg font-semibold
+                    ${luminance < 0.5 ? 'text-neutral-800 group-hover:text-white' 
+                    : 'text-white group-hover:text-neutral-800'}`}>
+                        Review us on Trip Advisor!
                     </span>
                 </a>
             {/if}

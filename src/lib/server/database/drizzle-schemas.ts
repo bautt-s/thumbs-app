@@ -48,6 +48,7 @@ export const linkTreeTable = pgTable('link_trees', {
 	id: text('id').notNull().primaryKey(),
 	googleLink: text('google_link'),
 	yelpLink: text('yelp_link'),
+	tripAdvisorLink: text('trip_advisor_link'),
 	otherLinks: jsonb('other_links').array(),
 	image: text('image'),
 	color: text('color'),

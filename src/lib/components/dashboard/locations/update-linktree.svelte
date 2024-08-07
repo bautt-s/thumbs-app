@@ -11,6 +11,7 @@
         id: true,
         googleLink: true,
         yelpLink: true,
+        tripAdvisorLink: true,
         color: true,
         visible: true
     })
@@ -19,15 +20,12 @@
     export let locationName: string
 
     export let linkTree
-    
-    let open = false
 
     $: if (form && form.success) {
-        open = !form.success
         if (form.success) invalidateAll()
         form = null
     }  
-</script>
+</script>   
 
 <Sheet.Root>
     <Sheet.Trigger asChild let:builder>
@@ -82,7 +80,14 @@
                         <Form.Input value={linkTree?.yelpLink} />
                         <Form.Validation />
                     </Form.Item>
-                </Form.Field>        
+                </Form.Field>    
+                <Form.Field {config} name="tripAdvisorLink">
+                    <Form.Item>
+                        <Form.Label>Trip Advisor URL</Form.Label>
+                        <Form.Input value={linkTree?.tripAdvisorLink} />
+                        <Form.Validation />
+                    </Form.Item>
+                </Form.Field>         
                 <Form.Field {config} name="color">
                     <div class="flex flex-row items-center">
                         <Form.Input value={linkTree?.color} type='color' class="w-11 h-10 mr-4" />
