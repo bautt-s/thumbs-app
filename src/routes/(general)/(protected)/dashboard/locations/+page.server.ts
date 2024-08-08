@@ -163,7 +163,6 @@ export const actions = {
 	},
 
 	linkTree: async (event: RequestEvent) => {
-		console.log('ABC')
 		const form = await superValidate(event, linkTreeSchema);
 		let success = false
 
@@ -176,15 +175,15 @@ export const actions = {
 		try {
 			if (!event.locals.user) throw Error
 			if (!event.locals.business) throw Error
-
+			
 			const linkTree = {
-				googleLink: form.data.googleLink,
-				yelpLink: form.data.yelpLink,
-				tripAdvisorLink: form.data.tripAdvisorLink,
+				googleLink: form.data.googleLink || '',
+				yelpLink: form.data.yelpLink || '',
+				tripAdvisorLink: form.data.tripAdvisorLink || '',
 				image: null,
 				color: form.data.color,
 				visible: form.data.visible
-			}
+ 			}
 
 			let updatedTree = await updateLinkTree(form.data.id, linkTree)
 

@@ -31,6 +31,21 @@
         setTimeout(() => copy = false, 1000);
     }
 
+    const handleClick = (event: MouseEvent, href: string | null, target: string) => {
+        if (href) {
+            event.preventDefault();
+
+            logClickAnalytics(href);
+    
+            if (target === "_blank") window.open(href, "_blank");
+            else window.location.href = href;
+        }
+    };
+
+    const logClickAnalytics = (url: string) => {
+        console.log(`Link clicked: ${url}`)
+    };
+
     let googleHover = false
     let yelpHover = false
     let tripAdvisorHover = false
@@ -124,11 +139,12 @@ style={`background-color: ${linkTree?.visible ? linkTree?.color : 'white'}`}>
 
         <div class="flex flex-col w-full gap-y-4 mt-4">
             {#if linkTree.googleLink}
-                <a href={linkTree.googleLink} class={`flex flex-row items-center w-full border-2 group px-4 py-4 duration-300 
+                <button on:click={(e) => handleClick(e, linkTree.googleLink, '_blank')}
+                class={`flex flex-row items-center w-full border-2 group px-4 py-4 duration-300 
                 rounded-lg transition-all ${luminance > 0.5 ? 'hover:border-neutral-800' : 'hover:border-white'}`}
                 on:mouseover={() => googleHover = true} on:mouseout={() => googleHover = false}
                 style={`background-color: ${googleHover ? linkTree.color : (luminance > 0.5 ? '#262626' : 'white')}`} 
-                on:blur={() => null} on:focus={() => null} target="_blank">
+                on:blur={() => null} on:focus={() => null}>
                     <IconGoogle class="text-xl left-2 relative" 
                     style={!googleHover ? `color: ${linkTree?.color}` 
                     : (luminance > 0.5 ? 'color: #262626' : 'color: white')} />
@@ -138,15 +154,16 @@ style={`background-color: ${linkTree?.visible ? linkTree?.color : 'white'}`}>
                     : 'text-white group-hover:text-neutral-800'}`}>
                         Review us on Google!
                     </span>
-                </a>
+                </button>
             {/if}
 
             {#if linkTree.yelpLink}
-                <a href={linkTree.yelpLink} class={`flex flex-row items-center w-full border-2 group px-4 py-4 duration-300
+                <button on:click={(e) => handleClick(e, linkTree.yelpLink, '_blank')}
+                class={`flex flex-row items-center w-full border-2 group px-4 py-4 duration-300
                 rounded-lg transition-all ${luminance > 0.5 ? 'hover:border-neutral-800' : 'hover:border-white'}`}  
                 on:mouseover={() => yelpHover = true} on:mouseout={() => yelpHover = false} 
                 style={`background-color: ${yelpHover ? linkTree.color : (luminance > 0.5 ? '#262626' : 'white')}`} 
-                on:blur={() => null} on:focus={() => null} target="_blank">
+                on:blur={() => null} on:focus={() => null}>
                     <IconYelp class="text-xl left-2 relative"
                     style={!yelpHover ? `color: ${linkTree?.color}` 
                     : (luminance > 0.5 ? 'color: #262626' : 'color: white')} />
@@ -156,15 +173,16 @@ style={`background-color: ${linkTree?.visible ? linkTree?.color : 'white'}`}>
                     : 'text-white group-hover:text-neutral-800'}`}>
                         Review us on Yelp!
                     </span>
-                </a>
+                </button>
             {/if}
 
             {#if linkTree.tripAdvisorLink}
-                <a href={linkTree.tripAdvisorLink} class={`flex flex-row items-center w-full border-2 group px-4 py-4 duration-300
+                <button on:click={(e) => handleClick(e, linkTree.tripAdvisorLink, '_blank')}
+                class={`flex flex-row items-center w-full border-2 group px-4 py-4 duration-300
                 rounded-lg transition-all ${luminance > 0.5 ? 'hover:border-neutral-800' : 'hover:border-white'}`}  
                 on:mouseover={() => tripAdvisorHover = true} on:mouseout={() => tripAdvisorHover = false} 
                 style={`background-color: ${tripAdvisorHover ? linkTree.color : (luminance > 0.5 ? '#262626' : 'white')}`} 
-                on:blur={() => null} on:focus={() => null} target="_blank">
+                on:blur={() => null} on:focus={() => null}>
                     <IconYelp class="text-xl left-2 relative"
                     style={!tripAdvisorHover ? `color: ${linkTree?.color}` 
                     : (luminance > 0.5 ? 'color: #262626' : 'color: white')} />
@@ -174,7 +192,7 @@ style={`background-color: ${linkTree?.visible ? linkTree?.color : 'white'}`}>
                     : 'text-white group-hover:text-neutral-800'}`}>
                         Review us on Trip Advisor!
                     </span>
-                </a>
+                </button>
             {/if}
         </div>
     </div>

@@ -18,7 +18,6 @@
 
     export let form: any
     export let locationName: string
-
     export let linkTree
 
     $: if (form && form.success) {
@@ -80,14 +79,15 @@
                         <Form.Input value={linkTree?.yelpLink} />
                         <Form.Validation />
                     </Form.Item>
-                </Form.Field>    
+                </Form.Field>
                 <Form.Field {config} name="tripAdvisorLink">
                     <Form.Item>
                         <Form.Label>Trip Advisor URL</Form.Label>
                         <Form.Input value={linkTree?.tripAdvisorLink} />
                         <Form.Validation />
                     </Form.Item>
-                </Form.Field>         
+                </Form.Field>       
+                
                 <Form.Field {config} name="color">
                     <div class="flex flex-row items-center">
                         <Form.Input value={linkTree?.color} type='color' class="w-11 h-10 mr-4" />
@@ -99,7 +99,7 @@
                 </Form.Field>
                 <Form.Field {config} name="visible">
                     <div class="flex flex-row items-center gap-x-4 mt-6">
-                        <Form.Switch checked={linkTree?.visible} />
+                        <Form.Switch value={linkTree.visible} />
                         <div class="flex flex-col">
                             <span class="font-semibold text-sm">Visible tree</span>
                             <span class="text-sm text-gray-500">Enable or disable this location's tree.</span>
